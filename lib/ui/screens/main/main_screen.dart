@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tmdb/constants.dart';
 import 'package:flutter_tmdb/models/movies_model.dart';
 
 import 'package:flutter_tmdb/service_locator.dart';
 import 'package:flutter_tmdb/blocs/movies_bloc.dart';
+import 'package:flutter_tmdb/ui/screens/main/widgets/appbar_image_container.dart';
 import 'package:flutter_tmdb/ui/screens/main/widgets/expansion_section.dart';
 import 'package:flutter_tmdb/utlities.dart';
 
@@ -58,42 +58,23 @@ class _MainScreenState extends State<MainScreen> {
             flexibleSpace: FlexibleSpaceBar(
               background: Center(
                 child: StreamBuilder<List<MoviesResultModel>>(
-                    stream: getIt<MoviesBloc>().popularMovies,
-                    builder: (context, snapshot) {
-                      final int randomIndex = getRandomIndex(snapshot.data?.length ?? 1);
+                  stream: getIt<MoviesBloc>().popularMovies,
+                  builder: (context, snapshot) {
+                    final int randomIndex = getRandomIndex(snapshot.data?.length ?? 1);
 
-                      return Container(
-                        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                        height: 192.0,
-                        width: 192.0,
-                        decoration: snapshot.connectionState == ConnectionState.waiting
-                            ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.red,
-                                    blurRadius: 4.0,
-                                    offset: Offset(1.0, 2.0), // Shadow position
-                                  ),
-                                ],
-                              )
-                            : BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0xFF444444),
-                                    blurRadius: 4.0,
-                                    offset: Offset(1.0, 2.0), // Shadow position
-                                  ),
-                                ],
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      "$kPictureBaseUrl/${snapshot.data?[randomIndex].posterPath}"),
-                                ),
-                              ),
+                    if (snapshot.hasError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Error loading image")),
                       );
-                    }),
+                    }
+                    return snapshot.connectionState == ConnectionState.waiting ||
+                            snapshot.data == null
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : AppbarImageContainer(imagePath: snapshot.data![randomIndex].posterPath!);
+                  },
+                ),
               ),
             ),
           ),

@@ -1,1 +1,1 @@
-const kPictureBaseUrl = "https://image.tmdb.org/t/p/original";
+const kPictureBaseUrl = "https://image.tmdb.org/t/p";

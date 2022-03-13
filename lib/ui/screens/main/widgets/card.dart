@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tmdb/blocs/movies_bloc.dart';
 import 'package:flutter_tmdb/service_locator.dart';
@@ -43,11 +44,14 @@ class MainCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
-              child: Image.network(
-                url,
+              child: CachedNetworkImage(
+                imageUrl: url,
                 height: 120.0,
                 width: 96.0,
                 fit: BoxFit.cover,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
               ),
             ),
             const SizedBox(height: 8.0),

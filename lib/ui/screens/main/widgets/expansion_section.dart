@@ -26,20 +26,27 @@ class MainExpansionSection extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: ExpansionTile(
-          onExpansionChanged: (expanding) => {
-            if (callback != null) {callback!()}
-          },
           title: Text(title),
+          maintainState: true,
           backgroundColor: Colors.white,
           initiallyExpanded: initiallyExpanded,
           collapsedBackgroundColor: Colors.white,
+          onExpansionChanged: (expanding) => {
+            if (callback != null) {callback!()}
+          },
           children: [
             SizedBox(
               height: 154.0,
               child: StreamBuilder<List<MoviesResultModel>>(
                   stream: movies,
                   builder: (context, snapshot) {
-                    return snapshot.connectionState == ConnectionState.waiting
+                    if (snapshot.hasError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Error loading image")),
+                      );
+                    }
+                    return snapshot.connectionState == ConnectionState.waiting ||
+                            snapshot.data == null
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
@@ -49,7 +56,7 @@ class MainExpansionSection extends StatelessWidget {
                               id: snapshot.data![index].id!,
                               isFirst: index == 0,
                               isLast: index == movies.value.length - 1,
-                              url: "$kPictureBaseUrl/${snapshot.data![index].posterPath}",
+                              url: "$kPictureBaseUrl/w500${snapshot.data![index].posterPath}",
                               title: snapshot.data![index].title!,
                             ),
                             itemCount: movies.value.length,

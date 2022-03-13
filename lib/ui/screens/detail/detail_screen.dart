@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tmdb/constants.dart';
 
@@ -18,7 +19,12 @@ class DetailScreen extends StatelessWidget {
       body: StreamBuilder<MovieModel>(
           stream: getIt<MoviesBloc>().movie,
           builder: (context, snapshot) {
-            return snapshot.connectionState == ConnectionState.waiting
+            if (snapshot.hasError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Error loading image")),
+              );
+            }
+            return snapshot.connectionState == ConnectionState.waiting || snapshot.data == null
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
@@ -26,9 +32,11 @@ class DetailScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 24.0, top: 16.0, right: 24.0),
                     decoration: BoxDecoration(
+                      color: Colors.black,
                       borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                       image: DecorationImage(
-                        image: NetworkImage("$kPictureBaseUrl/${snapshot.data?.backdropPath}"),
+                        image: CachedNetworkImageProvider(
+                            "$kPictureBaseUrl/w780${snapshot.data?.backdropPath}"),
                         fit: BoxFit.cover,
                         colorFilter:
                             ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
