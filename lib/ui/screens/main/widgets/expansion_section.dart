@@ -7,7 +7,7 @@ import 'package:flutter_tmdb/ui/screens/main/widgets/card.dart';
 class MainExpansionSection extends StatelessWidget {
   final String title;
   final bool initiallyExpanded;
-  final ValueStream<List<MoviesResult>> movies;
+  final ValueStream<List<MoviesResultModel>> movies;
   final VoidCallback? callback;
 
   const MainExpansionSection({
@@ -37,7 +37,7 @@ class MainExpansionSection extends StatelessWidget {
           children: [
             SizedBox(
               height: 154.0,
-              child: StreamBuilder<List<MoviesResult>>(
+              child: StreamBuilder<List<MoviesResultModel>>(
                   stream: movies,
                   builder: (context, snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
@@ -47,6 +47,7 @@ class MainExpansionSection extends StatelessWidget {
                         : ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) => MainCard(
+                              id: snapshot.data![index].id!,
                               isFirst: index == 0,
                               isLast: index == movies.value.length - 1,
                               url:

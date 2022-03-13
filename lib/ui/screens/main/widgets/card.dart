@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tmdb/blocs/movies_bloc.dart';
+import 'package:flutter_tmdb/service_locator.dart';
 
 import 'package:flutter_tmdb/ui/screens/detail/detail_screen.dart';
 
 class MainCard extends StatelessWidget {
+  final int id;
   final bool isFirst;
   final bool isLast;
   final String url;
   final String title;
 
-  const MainCard(
-      {Key? key,
-      required this.isFirst,
-      required this.isLast,
-      required this.url,
-      required this.title})
-      : super(key: key);
+  const MainCard({
+    Key? key,
+    required this.id,
+    required this.isFirst,
+    required this.isLast,
+    required this.url,
+    required this.title,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
+        getIt<MoviesBloc>().getMovie(id),
         showModalBottomSheet(
           context: context,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           builder: (context) => const DetailScreen(),
         )
       },

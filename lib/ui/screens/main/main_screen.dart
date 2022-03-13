@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tmdb/blocs/movies_bloc.dart';
-import 'package:flutter_tmdb/service_locator.dart';
 
+import 'package:flutter_tmdb/service_locator.dart';
+import 'package:flutter_tmdb/blocs/movies_bloc.dart';
 import 'package:flutter_tmdb/ui/screens/main/widgets/expansion_section.dart';
 
 class MainScreen extends StatelessWidget {
