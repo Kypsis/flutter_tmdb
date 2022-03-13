@@ -1,11 +1,48 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_tmdb/constants.dart';
+import 'package:flutter_tmdb/models/movies_model.dart';
 
 import 'package:flutter_tmdb/service_locator.dart';
 import 'package:flutter_tmdb/blocs/movies_bloc.dart';
 import 'package:flutter_tmdb/ui/screens/main/widgets/expansion_section.dart';
+import 'package:flutter_tmdb/utlities.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  Timer? timer;
+
+  void initializePeriodicFetch() {
+    timer = Timer.periodic(
+        const Duration(seconds: 2), (Timer t) => getIt<MoviesBloc>().getLatestMovies());
+  }
+
+  void togglePeriodicFetch() {
+    if (timer?.isActive == true) {
+      timer?.cancel();
+    } else {
+      initializePeriodicFetch();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializePeriodicFetch();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,25 +57,43 @@ class MainScreen extends StatelessWidget {
             backgroundColor: Colors.grey,
             flexibleSpace: FlexibleSpaceBar(
               background: Center(
-                child: Container(
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                  height: 192.0,
-                  width: 192.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0xFF444444),
-                        blurRadius: 4.0,
-                        offset: Offset(1.0, 2.0), // Shadow position
-                      ),
-                    ],
-                    image: const DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage("https://picsum.photos/192/192"),
-                    ),
-                  ),
-                ),
+                child: StreamBuilder<List<MoviesResultModel>>(
+                    stream: getIt<MoviesBloc>().popularMovies,
+                    builder: (context, snapshot) {
+                      final int randomIndex = getRandomIndex(snapshot.data?.length ?? 1);
+
+                      return Container(
+                        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                        height: 192.0,
+                        width: 192.0,
+                        decoration: snapshot.connectionState == ConnectionState.waiting
+                            ? BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.red,
+                                    blurRadius: 4.0,
+                                    offset: Offset(1.0, 2.0), // Shadow position
+                                  ),
+                                ],
+                              )
+                            : BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0xFF444444),
+                                    blurRadius: 4.0,
+                                    offset: Offset(1.0, 2.0), // Shadow position
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      "$kPictureBaseUrl/${snapshot.data?[randomIndex].posterPath}"),
+                                ),
+                              ),
+                      );
+                    }),
               ),
             ),
           ),
@@ -49,6 +104,7 @@ class MainScreen extends StatelessWidget {
                   title: "Latest movies",
                   initiallyExpanded: true,
                   movies: getIt<MoviesBloc>().latestMovies,
+                  callback: () => togglePeriodicFetch(),
                 ),
                 MainExpansionSection(
                   title: "Popular movies",

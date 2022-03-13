@@ -16,6 +16,7 @@ class MoviesBloc {
   void getLatestMovies() async {
     List<MoviesResultModel> response = await _repository.getLatestMovies();
     _latestMovies.sink.add(response);
+    print("⤵️ Getting latest movies");
   }
 
   void getPopularMovies() async {

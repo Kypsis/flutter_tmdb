@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tmdb/constants.dart';
 import 'package:flutter_tmdb/models/movies_model.dart';
 import 'package:rxdart/streams.dart';
 
@@ -25,10 +26,8 @@ class MainExpansionSection extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: ExpansionTile(
-          onExpansionChanged: (expanding) {
-            if (expanding && callback != null) {
-              callback!();
-            }
+          onExpansionChanged: (expanding) => {
+            if (callback != null) {callback!()}
           },
           title: Text(title),
           backgroundColor: Colors.white,
@@ -50,8 +49,7 @@ class MainExpansionSection extends StatelessWidget {
                               id: snapshot.data![index].id!,
                               isFirst: index == 0,
                               isLast: index == movies.value.length - 1,
-                              url:
-                                  "https://image.tmdb.org/t/p/original/${movies.value[index].posterPath}",
+                              url: "$kPictureBaseUrl/${snapshot.data![index].posterPath}",
                               title: snapshot.data![index].title!,
                             ),
                             itemCount: movies.value.length,

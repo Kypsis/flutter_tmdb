@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tmdb/constants.dart';
 
 import 'package:flutter_tmdb/service_locator.dart';
 import 'package:flutter_tmdb/blocs/movies_bloc.dart';
@@ -27,8 +28,7 @@ class DetailScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                       image: DecorationImage(
-                        image: NetworkImage(
-                            "https://image.tmdb.org/t/p/original/${snapshot.data?.backdropPath}"),
+                        image: NetworkImage("$kPictureBaseUrl/${snapshot.data?.backdropPath}"),
                         fit: BoxFit.cover,
                         colorFilter:
                             ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
