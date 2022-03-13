@@ -1,7 +1,7 @@
 name: flutter_tmdb
 description: A new Flutter project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -13,15 +13,17 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
 
-  bloc: any
-  flutter_bloc: any
-  get_it: any
-  rxdart: any
+  get_it: ^7.2.0
+  http: ^0.13.4
+  rxdart: ^0.27.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flutter_dotenv: ^5.0.2
 
 flutter:
   uses-material-design: true
+  assets:
+  - .env

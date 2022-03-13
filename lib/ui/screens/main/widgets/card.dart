@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_tmdb/ui/screens/detail/detail_screen.dart';
 
 class MainCard extends StatelessWidget {
@@ -44,7 +45,10 @@ class MainCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8.0),
-            Text(title)
+            //FIXME
+            FittedBox(
+              child: Text(title),
+            )
           ],
         ),
       ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tmdb/blocs/movies_bloc.dart';
+import 'package:flutter_tmdb/service_locator.dart';
+
 import 'package:flutter_tmdb/ui/screens/main/widgets/expansion_section.dart';
 
 class MainScreen extends StatelessWidget {
@@ -42,16 +45,26 @@ class MainScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                const MainExpansionSection(
+                MainExpansionSection(
                   title: "Latest movies",
                   initiallyExpanded: true,
+                  movies: getIt<MoviesBloc>().latestMovies,
                 ),
-                const MainExpansionSection(
+                MainExpansionSection(
                   title: "Popular movies",
                   initiallyExpanded: true,
+                  movies: getIt<MoviesBloc>().popularMovies,
                 ),
-                const MainExpansionSection(title: "Top Rated movies"),
-                const MainExpansionSection(title: "Upcoming movies"),
+                MainExpansionSection(
+                  title: "Top Rated movies",
+                  movies: getIt<MoviesBloc>().topRatedMovies,
+                  callback: () => getIt<MoviesBloc>().getTopRatedMovies(),
+                ),
+                MainExpansionSection(
+                  title: "Upcoming movies",
+                  movies: getIt<MoviesBloc>().upcomingMovies,
+                  callback: () => getIt<MoviesBloc>().getUpcomingMovies(),
+                ),
               ],
             ),
           ),
