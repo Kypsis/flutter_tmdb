@@ -28,49 +28,56 @@ class DetailScreen extends StatelessWidget {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding:
-                        const EdgeInsets.only(left: Spacing.l, top: Spacing.m, right: Spacing.l),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: const BorderRadius.all(Radius.circular(CurveRadius.m)),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                            "$kPictureBaseUrl/w780${snapshot.data?.backdropPath}"),
-                        fit: BoxFit.cover,
-                        colorFilter:
-                            ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
+                : RepaintBoundary(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding:
+                          const EdgeInsets.only(left: Spacing.l, top: Spacing.m, right: Spacing.l),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: const BorderRadius.all(Radius.circular(CurveRadius.m)),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                              "$kPictureBaseUrl/w780${snapshot.data?.backdropPath}"),
+                          fit: BoxFit.cover,
+                          colorFilter:
+                              ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
+                        ),
                       ),
-                    ),
-                    child: ListView(
-                      children: [
-                        DetailText(
-                          title: "Title",
-                          text: snapshot.data?.title ?? "",
-                        ),
-                        DetailText(
-                          title: "Overview",
-                          text: snapshot.data?.overview ?? "",
-                        ),
-                        if (snapshot.hasData && snapshot.data!.budget! > 0)
+                      child: ListView(
+                        children: [
                           DetailText(
-                            title: "Budget",
-                            text: intToDollars(snapshot.data!.budget!),
+                            key: const ValueKey("title"),
+                            title: "Title",
+                            text: snapshot.data?.title ?? "",
                           ),
-                        if (snapshot.hasData && snapshot.data!.revenue! > 0)
                           DetailText(
-                            title: "Revenue",
-                            text: intToDollars(snapshot.data!.revenue!),
+                            key: const ValueKey("overview"),
+                            title: "Overview",
+                            text: snapshot.data?.overview ?? "",
                           ),
+                          if (snapshot.hasData && snapshot.data!.budget! > 0)
+                            DetailText(
+                              key: const ValueKey("budget"),
+                              title: "Budget",
+                              text: intToDollars(snapshot.data!.budget!),
+                            ),
+                          if (snapshot.hasData && snapshot.data!.revenue! > 0)
+                            DetailText(
+                              key: const ValueKey("revenue"),
+                              title: "Revenue",
+                              text: intToDollars(snapshot.data!.revenue!),
+                            ),
 
-                        /// TODO: All movies seem to have their video property set to false.
-                        /// Uncomment when/if the API is fixed.
-                        if (snapshot.hasData /* && snapshotData!.video! */)
-                          Center(
-                            child: PlayContainer(playMessage: snapshot.data!.title!),
-                          )
-                      ],
+                          /// TODO: All movies seem to have their video property set to false.
+                          /// Uncomment when/if the API is fixed.
+                          if (snapshot.hasData /* && snapshotData!.video! */)
+                            Center(
+                              key: const ValueKey("playContainer"),
+                              child: PlayContainer(playMessage: snapshot.data!.title!),
+                            )
+                        ],
+                      ),
                     ),
                   );
           }),

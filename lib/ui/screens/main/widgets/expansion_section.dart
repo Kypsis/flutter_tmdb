@@ -23,50 +23,53 @@ class MainExpansionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: Spacing.m),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(CurveRadius.m),
-        child: ExpansionTile(
-          title: Text(title),
-          maintainState: true,
-          backgroundColor: Colors.white,
-          initiallyExpanded: initiallyExpanded,
-          collapsedBackgroundColor: Colors.white,
-          onExpansionChanged: (expanding) => {
-            if (callback != null) {callback!()}
-          },
-          children: [
-            SizedBox(
-              height: 178.0,
-              child: StreamBuilder<List<MoviesResultModel>>(
-                  stream: movies,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Error loading image")),
-                      );
-                    }
+      child: RepaintBoundary(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(CurveRadius.m),
+          child: ExpansionTile(
+            title: Text(title),
+            maintainState: true,
+            backgroundColor: Colors.white,
+            initiallyExpanded: initiallyExpanded,
+            collapsedBackgroundColor: Colors.white,
+            onExpansionChanged: (expanding) => {
+              if (callback != null) {callback!()}
+            },
+            children: [
+              SizedBox(
+                height: 178.0,
+                child: StreamBuilder<List<MoviesResultModel>>(
+                    stream: movies,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Error loading image")),
+                        );
+                      }
 
-                    return snapshot.connectionState == ConnectionState.waiting ||
-                            snapshot.data == null
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) => MainCard(
-                              id: snapshot.data![index].id!,
-                              url: "$kPictureBaseUrl/w500${snapshot.data![index].posterPath}",
-                              title: snapshot.data![index].title!,
-                              isFirst: index == 0,
-                              isLast: index == movies.value.length - 1,
-                            ),
-                            itemCount: movies.value.length,
-                          );
-                  }),
-            ),
-            // To have the horizontal scrollbar overscroll glow on Android properly aligned
-            const SizedBox(height: Spacing.m)
-          ],
+                      return snapshot.connectionState == ConnectionState.waiting ||
+                              snapshot.data == null
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) => MainCard(
+                                key: ValueKey(snapshot.data![index].id!),
+                                id: snapshot.data![index].id!,
+                                url: "$kPictureBaseUrl/w500${snapshot.data![index].posterPath}",
+                                title: snapshot.data![index].title!,
+                                isFirst: index == 0,
+                                isLast: index == movies.value.length - 1,
+                              ),
+                              itemCount: movies.value.length,
+                            );
+                    }),
+              ),
+              // To have the horizontal scrollbar overscroll glow on Android properly aligned
+              const SizedBox(height: Spacing.m)
+            ],
+          ),
         ),
       ),
     );

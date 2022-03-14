@@ -21,7 +21,9 @@ class _MainScreenState extends State<MainScreen> {
 
   void initializePeriodicFetch() {
     timer = Timer.periodic(
-        const Duration(seconds: 2), (Timer t) => getIt<MoviesBloc>().getLatestMovies());
+      const Duration(seconds: 2),
+      (Timer t) => getIt<MoviesBloc>().getLatestMovies(),
+    );
   }
 
   void togglePeriodicFetch() {
@@ -47,8 +49,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // So the app extends behind iPhone notch
-      //extendBodyBehindAppBar: true,
       backgroundColor: Colors.grey,
       body: CustomScrollView(
         slivers: <Widget>[
@@ -56,24 +56,27 @@ class _MainScreenState extends State<MainScreen> {
             expandedHeight: 256.0,
             backgroundColor: Colors.grey,
             flexibleSpace: FlexibleSpaceBar(
-              background: Center(
-                child: StreamBuilder<List<MoviesResultModel>>(
-                  stream: getIt<MoviesBloc>().popularMovies,
-                  builder: (context, snapshot) {
-                    final int randomIndex = getRandomIndex(snapshot.data?.length ?? 1);
+              background: RepaintBoundary(
+                child: Center(
+                  child: StreamBuilder<List<MoviesResultModel>>(
+                    stream: getIt<MoviesBloc>().popularMovies,
+                    builder: (context, snapshot) {
+                      final int randomIndex = getRandomIndex(snapshot.data?.length ?? 1);
 
-                    if (snapshot.hasError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Error loading image")),
-                      );
-                    }
-                    return snapshot.connectionState == ConnectionState.waiting ||
-                            snapshot.data == null
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : AppbarImageContainer(imagePath: snapshot.data![randomIndex].posterPath!);
-                  },
+                      if (snapshot.hasError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Error loading image")),
+                        );
+                      }
+                      return snapshot.connectionState == ConnectionState.waiting ||
+                              snapshot.data == null
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : AppbarImageContainer(
+                              imagePath: snapshot.data![randomIndex].posterPath!);
+                    },
+                  ),
                 ),
               ),
             ),
@@ -82,22 +85,26 @@ class _MainScreenState extends State<MainScreen> {
             delegate: SliverChildListDelegate(
               [
                 MainExpansionSection(
+                  key: const ValueKey("latest"),
                   title: "Latest movies",
                   initiallyExpanded: true,
                   movies: getIt<MoviesBloc>().latestMovies,
                   callback: () => togglePeriodicFetch(),
                 ),
                 MainExpansionSection(
+                  key: const ValueKey("popular"),
                   title: "Popular movies",
                   initiallyExpanded: true,
                   movies: getIt<MoviesBloc>().popularMovies,
                 ),
                 MainExpansionSection(
+                  key: const ValueKey("top"),
                   title: "Top Rated movies",
                   movies: getIt<MoviesBloc>().topRatedMovies,
                   callback: () => getIt<MoviesBloc>().getTopRatedMovies(),
                 ),
                 MainExpansionSection(
+                  key: const ValueKey("upcoming"),
                   title: "Upcoming movies",
                   movies: getIt<MoviesBloc>().upcomingMovies,
                   callback: () => getIt<MoviesBloc>().getUpcomingMovies(),
@@ -105,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-          // Compensating for extendBodyBehindAppBar: true property
+          // Compensating for iPhone notch
           SliverToBoxAdapter(
             child: SizedBox(height: MediaQuery.of(context).padding.bottom),
           )
