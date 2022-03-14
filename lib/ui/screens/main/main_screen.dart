@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void initializePeriodicFetch() {
     timer = Timer.periodic(
-      const Duration(seconds: 2),
+      const Duration(seconds: 30),
       (Timer t) => getIt<MoviesBloc>().getLatestMovies(),
     );
   }

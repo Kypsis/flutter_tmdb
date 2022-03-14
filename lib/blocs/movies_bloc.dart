@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter_tmdb/models/movie_model.dart';
@@ -16,7 +18,9 @@ class MoviesBloc {
   void getLatestMovies() async {
     List<MoviesResultModel> response = await _repository.getLatestMovies();
     _latestMovies.sink.add(response);
-    print("⤵️ Getting latest movies");
+    if (kDebugMode) {
+      print("⤵️ Getting latest movies");
+    }
   }
 
   void getPopularMovies() async {
