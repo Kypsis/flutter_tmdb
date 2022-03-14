@@ -1,6 +1,6 @@
-import 'package:flutter_tmdb/models/movie_model.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:flutter_tmdb/models/movie_model.dart';
 import 'package:flutter_tmdb/models/movies_model.dart';
 import 'package:flutter_tmdb/repositories/movies_repository.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tmdb/constants.dart';
-import 'package:flutter_tmdb/models/movies_model.dart';
 import 'package:rxdart/streams.dart';
 
+import 'package:flutter_tmdb/constants.dart';
+import 'package:flutter_tmdb/models/movies_model.dart';
 import 'package:flutter_tmdb/ui/screens/main/widgets/card.dart';
 
 class MainExpansionSection extends StatelessWidget {
@@ -22,9 +22,9 @@ class MainExpansionSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(bottom: Spacing.m),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(CurveRadius.m),
         child: ExpansionTile(
           title: Text(title),
           maintainState: true,
@@ -36,7 +36,7 @@ class MainExpansionSection extends StatelessWidget {
           },
           children: [
             SizedBox(
-              height: 154.0,
+              height: 178.0,
               child: StreamBuilder<List<MoviesResultModel>>(
                   stream: movies,
                   builder: (context, snapshot) {
@@ -45,6 +45,7 @@ class MainExpansionSection extends StatelessWidget {
                         const SnackBar(content: Text("Error loading image")),
                       );
                     }
+
                     return snapshot.connectionState == ConnectionState.waiting ||
                             snapshot.data == null
                         ? const Center(
@@ -54,17 +55,17 @@ class MainExpansionSection extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) => MainCard(
                               id: snapshot.data![index].id!,
-                              isFirst: index == 0,
-                              isLast: index == movies.value.length - 1,
                               url: "$kPictureBaseUrl/w500${snapshot.data![index].posterPath}",
                               title: snapshot.data![index].title!,
+                              isFirst: index == 0,
+                              isLast: index == movies.value.length - 1,
                             ),
                             itemCount: movies.value.length,
                           );
                   }),
             ),
             // To have the horizontal scrollbar overscroll glow on Android properly aligned
-            const SizedBox(height: 24.0)
+            const SizedBox(height: Spacing.m)
           ],
         ),
       ),

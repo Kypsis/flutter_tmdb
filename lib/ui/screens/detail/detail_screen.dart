@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tmdb/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import 'package:flutter_tmdb/utlities.dart';
+import 'package:flutter_tmdb/constants.dart';
 import 'package:flutter_tmdb/service_locator.dart';
 import 'package:flutter_tmdb/blocs/movies_bloc.dart';
 import 'package:flutter_tmdb/models/movie_model.dart';
 import 'package:flutter_tmdb/ui/screens/detail/widgets/detail_text.dart';
 import 'package:flutter_tmdb/ui/screens/detail/widgets/play_container.dart';
-import 'package:flutter_tmdb/utlities.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({Key? key}) : super(key: key);
@@ -30,10 +30,11 @@ class DetailScreen extends StatelessWidget {
                   )
                 : Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 24.0, top: 16.0, right: 24.0),
+                    padding:
+                        const EdgeInsets.only(left: Spacing.l, top: Spacing.m, right: Spacing.l),
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(CurveRadius.m)),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
                             "$kPictureBaseUrl/w780${snapshot.data?.backdropPath}"),

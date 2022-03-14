@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_tmdb/constants.dart';
+
 class PlayContainer extends StatelessWidget {
   final String playMessage;
 
@@ -12,11 +14,11 @@ class PlayContainer extends StatelessWidget {
         SnackBar(content: Text(playMessage)),
       ),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 16.0),
+        margin: const EdgeInsets.symmetric(vertical: Spacing.m),
         height: 96.0,
         width: 154.0,
-        decoration:
-            BoxDecoration(color: Colors.grey.shade600, borderRadius: BorderRadius.circular(8.0)),
+        decoration: BoxDecoration(
+            color: Colors.grey.shade600, borderRadius: BorderRadius.circular(CurveRadius.s)),
         child: const Icon(
           Icons.play_circle_filled_outlined,
           color: Colors.white,

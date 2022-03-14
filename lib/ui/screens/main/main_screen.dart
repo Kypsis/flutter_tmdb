@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_tmdb/models/movies_model.dart';
 
+import 'package:flutter_tmdb/utlities.dart';
 import 'package:flutter_tmdb/service_locator.dart';
 import 'package:flutter_tmdb/blocs/movies_bloc.dart';
-import 'package:flutter_tmdb/ui/screens/main/widgets/appbar_image_container.dart';
 import 'package:flutter_tmdb/ui/screens/main/widgets/expansion_section.dart';
-import 'package:flutter_tmdb/utlities.dart';
+import 'package:flutter_tmdb/ui/screens/main/widgets/appbar_image_container.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);

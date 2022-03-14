@@ -1,8 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tmdb/blocs/movies_bloc.dart';
-import 'package:flutter_tmdb/service_locator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import 'package:flutter_tmdb/constants.dart';
+import 'package:flutter_tmdb/service_locator.dart';
+import 'package:flutter_tmdb/blocs/movies_bloc.dart';
 import 'package:flutter_tmdb/ui/screens/detail/detail_screen.dart';
 
 class MainCard extends StatelessWidget {
@@ -28,22 +29,22 @@ class MainCard extends StatelessWidget {
         getIt<MoviesBloc>().getMovie(id),
         showModalBottomSheet(
           context: context,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CurveRadius.m)),
           builder: (context) => const DetailScreen(),
         )
       },
       child: Container(
         margin: EdgeInsets.only(
-          top: 8.0,
-          left: isFirst ? 16.0 : 8.0,
-          right: isLast ? 16.0 : 8.0,
+          top: Spacing.xs,
+          left: isFirst ? Spacing.m : Spacing.xs,
+          right: isLast ? Spacing.m : Spacing.xs,
         ),
         width: 96.0,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(CurveRadius.m),
               child: CachedNetworkImage(
                 imageUrl: url,
                 height: 120.0,
@@ -54,11 +55,19 @@ class MainCard extends StatelessWidget {
                 errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
               ),
             ),
-            const SizedBox(height: 8.0),
-            //FIXME
-            FittedBox(
-              child: Text(title),
-            )
+            const SizedBox(height: Spacing.xs),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 11.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

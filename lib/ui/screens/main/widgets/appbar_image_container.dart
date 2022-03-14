@@ -1,5 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter_tmdb/constants.dart';
 
 class AppbarImageContainer extends StatelessWidget {
@@ -12,7 +13,7 @@ class AppbarImageContainer extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(CurveRadius.m),
         boxShadow: const [
           BoxShadow(
             color: Color(0xFF444444),
@@ -22,7 +23,7 @@ class AppbarImageContainer extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(CurveRadius.m),
         child: CachedNetworkImage(
           imageUrl: "$kPictureBaseUrl/w500$imagePath",
           height: 192.0,

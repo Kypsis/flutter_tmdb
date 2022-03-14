@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_tmdb/constants.dart';
+
 class DetailText extends StatelessWidget {
   final String title;
   final String text;
@@ -13,7 +15,7 @@ class DetailText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(bottom: Spacing.m),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -24,7 +26,7 @@ class DetailText extends StatelessWidget {
                   const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.0),
             ),
           ),
-          const SizedBox(width: 8.0),
+          const SizedBox(width: Spacing.xs),
           Expanded(
             child: Text(
               text,
